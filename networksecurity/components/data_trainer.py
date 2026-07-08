@@ -25,7 +25,8 @@ from sklearn.ensemble import (
 import mlflow 
 from urllib.parse import urlparse
 
-
+import dagshub
+dagshub.init(repo_owner='git-Harshkumar', repo_name='Network_security', mlflow=True)
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
@@ -36,8 +37,8 @@ class ModelTrainer:
             raise NetworkSecurityException(e,sys)
         
     def track_mlflow(self,best_model, classificationmetric, model_name):
-        # Using local MLflow tracking — runs are stored in the mlruns/ folder
-        mlflow.set_tracking_uri("file:///C:/Users/harsh/OneDrive/Desktop/ML/Network-Security/mlruns")
+        # dagshub.init() at module level already sets the correct tracking URI
+        mlflow.set_experiment("Network_Security")
 
         with mlflow.start_run():
             f1_score = classificationmetric.f1_score
